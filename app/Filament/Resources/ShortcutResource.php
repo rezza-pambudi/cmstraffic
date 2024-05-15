@@ -8,20 +8,27 @@ use App\Models\Shortcut;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\SelectColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\MarkdownEditor;
 use App\Filament\Resources\ShortcutResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ShortcutResource\RelationManagers;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ViewAction;
 
 class ShortcutResource extends Resource
 {
     protected static ?string $model = Shortcut::class;
+
+    protected static ?string $modelLabel = 'CMS';
+
+    protected static ?string $navigationLabel = 'All CMS';
+
+    protected static ?string $navigationGroup = 'Operations';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -37,6 +44,7 @@ class ShortcutResource extends Resource
                     'Detikcom' => 'Detikcom',
                     'CNN Indonesia' => 'CNN Indonesia',
                     'CNBC Indonesia' => 'CNBC Indonesia',
+                    'Haibunda & Insertlive' => 'Haibunda & Insertlive',
                     'All Kanal' => 'All Kanal',
                 ])->preload(),
                 MarkdownEditor::make('deskripsi')->required()->columnSpanFull()->label('Deskripsi'),
@@ -49,7 +57,15 @@ class ShortcutResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('nama')->sortable()->searchable()->label('Nama'),
-                TextColumn::make('kanal')->sortable()->searchable()->label('Kanal'),
+                // TextColumn::make('kanal')->sortable()->searchable()->label('Kanal'),
+                SelectColumn::make('kanal')
+                    ->options([
+                        'Detikcom' => 'Detikcom',
+                        'CNN Indonesia' => 'CNN Indonesia',
+                        'CNBC Indonesia' => 'CNBC Indonesia',
+                        'Haibunda & Insertlive' => 'Haibunda & Insertlive',
+                        'All Kanal' => 'All Kanal',
+                    ]),
                 // TextColumn::make('deskripsi')->sortable()->searchable()->label('Deskripsi'),
                 TextColumn::make('link')->sortable()->searchable()->label('Link')->color('primary')->url(fn ($state) => $state)->openUrlInNewTab()
             ])
@@ -68,9 +84,10 @@ class ShortcutResource extends Resource
                         TextInput::make('deskripsi')
                             ->required()
                             ->maxLength(255),
-                            MarkdownEditor::make('link'),
+                        MarkdownEditor::make('link'),
                     ]),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -90,8 +107,14 @@ class ShortcutResource extends Resource
     {
         return [
             'index' => Pages\ListShortcuts::route('/'),
-            'create' => Pages\CreateShortcut::route('/create'),
+            // 'create' => Pages\CreateShortcut::route('/create'),
             'edit' => Pages\EditShortcut::route('/{record}/edit'),
         ];
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+    
 }

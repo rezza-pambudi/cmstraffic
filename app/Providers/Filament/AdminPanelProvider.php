@@ -27,9 +27,14 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->registration()
+            ->passwordReset()
+            ->emailVerification()
             ->colors([
-                'primary' => Color::Purple,
+                'primary' => Color::rgb('rgb(221, 118, 28)'),
             ])
+            ->font('Poppins')
+            ->favicon(url: '/images/logo/favicon.png')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
