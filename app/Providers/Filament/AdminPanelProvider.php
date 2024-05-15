@@ -31,7 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->passwordReset()
             ->emailVerification()
             ->colors([
-                'primary' => Color::rgb('rgb(221, 118, 28)'),
+                'primary' => Color::hex('#214497'),
             ])
             ->font('Poppins')
             ->favicon(url: '/images/logo/favicon.png')
