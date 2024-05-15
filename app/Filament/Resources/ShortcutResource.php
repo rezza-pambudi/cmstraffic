@@ -51,7 +51,7 @@ class ShortcutResource extends Resource
                 TextColumn::make('nama')->sortable()->searchable()->label('Nama'),
                 TextColumn::make('kanal')->sortable()->searchable()->label('Kanal'),
                 // TextColumn::make('deskripsi')->sortable()->searchable()->label('Deskripsi'),
-                TextColumn::make('link')->sortable()->searchable()->label('Link')->color('primary')->url(fn ($state) => $state)
+                TextColumn::make('link')->sortable()->searchable()->label('Link')->color('primary')->url(fn ($state) => $state)->openUrlInNewTab()
             ])
             ->filters([
                 //
